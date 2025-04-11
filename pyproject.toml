@@ -12,7 +12,9 @@ license = {file = "LICENSE"}
 authors = [
     {name = "Sanket Chitagopkar", email = "sanket.tronics@gmail.com"}
 ]
-dependencies = []
+dependencies = [
+    "requests"
+]
 
 [tool.setuptools.packages.find]
-where = ["my_package"]
+where = ["cricapi_ipl"]
