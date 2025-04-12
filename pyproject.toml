@@ -13,10 +13,12 @@ authors = [
     {name = "Sanket Chitagopkar", email = "sanket.tronics@gmail.com"}
 ]
 dependencies = [
-    "requests"
+    "requests",
+    "concurrent"
 ]
 [project.optional-dependencies]
-dev = ["pytest"]
+dev = ["pytest",
+       "unittest"]
 
 [tool.setuptools.packages.find]
 where = ["cricapi_ipl"]
