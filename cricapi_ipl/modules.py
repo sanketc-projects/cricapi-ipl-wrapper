@@ -11,7 +11,16 @@ SERIES_SEARCH_TERM = "Indian Premier League"
 # API URLs
 SERIES_SERACH_URL = "https://api.cricapi.com/v1/series"
 SERIES_INFO_URL = "https://api.cricapi.com/v1/series_info"
+MATCH_INFO_URL = "https://api.cricapi.com/v1/match_info"
 
+
+class Innings:
+    def __init__(self):
+        self.num = 0
+        self.team = ""
+        self.runs = 0
+        self.overs = 0.0
+        self.wickets = 0
 
 class Match:
     def __init__(self, match_json):
@@ -26,12 +35,56 @@ class Match:
         self.venue = match_json.get("venue", "N/A")
         self.home_team = match_json.get("teams", ["N/A", "N/A"])[0]
         self.away_team = match_json.get("teams", ["N/A", "N/A"])[1]
+        self.toss_winner = "" # will be updated when update_match_info() is called
+        self.toss_result = "" # will be updated when update_match_info() is called
+        self.match_winner = "" # will be updated when update_match_info() is called
+        self.innings = [Innings(), Innings()] # will be updated when update_match_info() is called
 
     def __str__(self):
         return f"{self.name:<40}, Date: {self.date.strftime('%B %d %Y'):<15}, Status: {self.status:<10}"
 
     def __repr__(self):
         return self.__str__()
+
+    def update_match_info(self):
+        if not API_KEY:
+            raise ValueError("API key is not set. Use set_api_key() to set it.")
+
+        params = {
+            "apikey": API_KEY,
+            "id": self.id
+        }
+        response = requests.get(MATCH_INFO_URL, params=params, timeout=10)
+        response.raise_for_status()
+        match_data = response.json().get("data", {})
+
+        if not match_data.get("matchEnded", False):
+            return
+
+        self.toss_winner = match_data.get("tossWinner", "")
+        self.toss_result = match_data.get("tossChoice", "")
+        self.match_winner = match_data.get("matchWinner", "")
+
+        score = match_data.get("score", [])
+        if len(score) != 2:
+            return
+        self.innings[0].num = 1
+        pattern = re.compile(r"(.*) Inning .*")
+        inngs_str = score[0].get("inning", "")
+        self.innings[0].team = pattern.match(inngs_str).group(1) if pattern.match(inngs_str) else inngs_str
+        self.innings[0].runs = score[0].get("r", 0)
+        self.innings[0].overs = score[0].get("o", 0.0)
+        self.innings[0].wickets = score[0].get("w", 0)
+
+        self.innings[1].num = 2
+        pattern = re.compile(r"(.*) Inning .*")
+        inngs_str = score[1].get("inning", "")
+        self.innings[1].team = pattern.match(inngs_str).group(1) if pattern.match(inngs_str) else inngs_str
+        self.innings[1].runs = score[1].get("r", 0)
+        self.innings[1].overs = score[1].get("o", 0.0)
+        self.innings[1].wickets = score[1].get("w", 0)
+
+        _update_hits_info(response.json().get("info", {}))
 
 class Series:
     def __init__(self, series_json):
@@ -69,11 +122,8 @@ class Series:
         response.raise_for_status()
         series_data = response.json().get("data", {})
         all_results = series_data.get("matchList", [])
-
-        info = response.json().get("info", {})
-        _update_hits_info(info)
-
         self.matches = [Match(match) for match in all_results]
+        _update_hits_info(response.json().get("info", {}))
 
 class HitInfo:
     def __init__(self):
