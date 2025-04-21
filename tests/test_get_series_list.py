@@ -226,12 +226,14 @@ def test_update_match_info_2():
         assert match.get_toss_result() == "bat"
         assert match.get_match_winner() == "Sunrisers Hyderabad"
         assert match.get_match_innings(1).num == 1
-        assert match.get_match_innings(1).team == "Punjab Kings"
+        assert match.get_match_innings(1).team.name == "Punjab Kings"
+        assert match.get_match_innings(1).team.short_name == "PK"
         assert match.get_match_innings(1).runs == 245
         assert match.get_match_innings(1).overs == 20
         assert match.get_match_innings(1).wickets == 6
         assert match.get_match_innings(2).num == 2
-        assert match.get_match_innings(2).team == "Sunrisers Hyderabad"
+        assert match.get_match_innings(2).team.name == "Sunrisers Hyderabad"
+        assert match.get_match_innings(2).team.short_name == "SH"
         assert match.get_match_innings(2).runs == 247
         assert match.get_match_innings(2).overs == 18.3
         assert match.get_match_innings(2).wickets == 2

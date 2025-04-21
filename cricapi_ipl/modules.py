@@ -14,16 +14,26 @@ SERIES_INFO_URL = "https://api.cricapi.com/v1/series_info"
 MATCH_INFO_URL = "https://api.cricapi.com/v1/match_info"
 
 
+class Team:
+    def __init__(self, team_name):
+        self.name = team_name
+        # short name is the acronym of the team name
+        self.short_name  = "".join([word[0].upper() for word in team_name.split() if word])
+
+    def __str__(self):
+        return f"{self.short_name:<3} - {self.name:<20}"
+
 class Innings:
     def __init__(self):
         self.num = 0
-        self.team = ""
+        self.team = Team("")
         self.runs = 0
         self.overs = 0.0
         self.wickets = 0
 
     def __str__(self):
-        return f"Innings {self.num:<4}: {self.team:<20} - score: {self.runs:<3}/{self.wickets:<2} Overs: {self.overs}"
+        # 0 padded runs and wickets
+        return f"Innings {self.num:<4}: {self.team.short_name:<5} - score: {self.runs:03}/{self.wickets:<2} Overs: {self.overs}"
 
     def __repr__(self):
         return self.__str__()
@@ -100,7 +110,7 @@ class Match:
         self.__innings[0].num = 1
         pattern = re.compile(r"(.*) Inning .*")
         inngs_str = score[0].get("inning", "")
-        self.__innings[0].team = pattern.match(inngs_str).group(1) if pattern.match(inngs_str) else inngs_str
+        self.__innings[0].team = Team(pattern.match(inngs_str).group(1) if pattern.match(inngs_str) else inngs_str)
         self.__innings[0].runs = score[0].get("r", 0)
         self.__innings[0].overs = score[0].get("o", 0.0)
         self.__innings[0].wickets = score[0].get("w", 0)
@@ -108,7 +118,7 @@ class Match:
         self.__innings[1].num = 2
         pattern = re.compile(r"(.*) Inning .*")
         inngs_str = score[1].get("inning", "")
-        self.__innings[1].team = pattern.match(inngs_str).group(1) if pattern.match(inngs_str) else inngs_str
+        self.__innings[1].team = Team(pattern.match(inngs_str).group(1) if pattern.match(inngs_str) else inngs_str)
         self.__innings[1].runs = score[1].get("r", 0)
         self.__innings[1].overs = score[1].get("o", 0.0)
         self.__innings[1].wickets = score[1].get("w", 0)

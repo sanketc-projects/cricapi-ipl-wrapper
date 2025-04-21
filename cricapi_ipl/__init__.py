@@ -6,4 +6,6 @@ __all__ = ["set_api_key",
            "Series",
            "HitInfo",
            "Match",
+           "Innings",
+           "Team",
           ]
