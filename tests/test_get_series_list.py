@@ -66,7 +66,7 @@ def test_get_series_list():
         assert hits.hits_used == 1
         assert hits.hits_limit == 100
 
-def test_update_match_info():
+def test_update_match_info_1():
     mock_response = Mock()
     mock_response.json.return_value = {
         "data": {
@@ -136,28 +136,28 @@ def test_update_match_info():
         })
         series.update_matches()
         assert len(series.matches) == 2
-        assert series.matches[0].name == "Chennai Super Kings vs Mumbai Indians, 3rd Match"
-        assert series.matches[0].status == "Chennai Super Kings won by 4 wkts"
-        assert series.matches[0].venue == "MA Chidambaram Stadium, Chennai"
-        assert series.matches[0].date == datetime.strptime("2025-03-23", "%Y-%m-%d")
-        assert series.matches[0].home_team == "Chennai Super Kings"
-        assert series.matches[0].away_team == "Mumbai Indians"
-        assert series.matches[0].id == "208d68e5-3fab-4f3b-88e9-29ec4a02d3e2"
+        assert series.matches[0].get_name() == "Chennai Super Kings vs Mumbai Indians, 3rd Match"
+        assert series.matches[0].get_status() == "Chennai Super Kings won by 4 wkts"
+        assert series.matches[0].get_venue() == "MA Chidambaram Stadium, Chennai"
+        assert series.matches[0].get_date() == datetime.strptime("2025-03-23", "%Y-%m-%d")
+        assert series.matches[0].get_home_team() == "Chennai Super Kings"
+        assert series.matches[0].get_away_team() == "Mumbai Indians"
+        assert series.matches[0].get_id() == "208d68e5-3fab-4f3b-88e9-29ec4a02d3e2"
 
-        assert series.matches[1].name == "Gujarat Titans vs Punjab Kings, 5th Match"
-        assert series.matches[1].status == "Punjab Kings won by 11 runs"
-        assert series.matches[1].venue == "Narendra Modi Stadium, Ahmedabad"
-        assert series.matches[1].date == datetime.strptime("2025-03-25", "%Y-%m-%d")
-        assert series.matches[1].home_team == "Gujarat Titans"
-        assert series.matches[1].away_team == "Punjab Kings"
-        assert series.matches[1].id == "83d70527-5fc4-4fad-8dd2-b88b385f379e"
+        assert series.matches[1].get_name() == "Gujarat Titans vs Punjab Kings, 5th Match"
+        assert series.matches[1].get_status() == "Punjab Kings won by 11 runs"
+        assert series.matches[1].get_venue() == "Narendra Modi Stadium, Ahmedabad"
+        assert series.matches[1].get_date() == datetime.strptime("2025-03-25", "%Y-%m-%d")
+        assert series.matches[1].get_home_team() == "Gujarat Titans"
+        assert series.matches[1].get_away_team() == "Punjab Kings"
+        assert series.matches[1].get_id() == "83d70527-5fc4-4fad-8dd2-b88b385f379e"
 
         hits = get_hits_info()
         assert hits.hits_today == 2
         assert hits.hits_used == 2
         assert hits.hits_limit == 100
 
-def test_update_match_info():
+def test_update_match_info_2():
     mock_response = Mock()
     mock_response.json.return_value = {
         "data": {
@@ -222,19 +222,19 @@ def test_update_match_info():
             ]
         })
         match.update_match_info()
-        assert match.toss_winner == "Punjab Kings"
-        assert match.toss_result == "bat"
-        assert match.match_winner == "Sunrisers Hyderabad"
-        assert match.innings[0].num == 1
-        assert match.innings[0].team == "Punjab Kings"
-        assert match.innings[0].runs == 245
-        assert match.innings[0].overs == 20
-        assert match.innings[0].wickets == 6
-        assert match.innings[1].num == 2
-        assert match.innings[1].team == "Sunrisers Hyderabad"
-        assert match.innings[1].runs == 247
-        assert match.innings[1].overs == 18.3
-        assert match.innings[1].wickets == 2
+        assert match.get_toss_winner() == "Punjab Kings"
+        assert match.get_toss_result() == "bat"
+        assert match.get_match_winner() == "Sunrisers Hyderabad"
+        assert match.get_match_innings(1).num == 1
+        assert match.get_match_innings(1).team == "Punjab Kings"
+        assert match.get_match_innings(1).runs == 245
+        assert match.get_match_innings(1).overs == 20
+        assert match.get_match_innings(1).wickets == 6
+        assert match.get_match_innings(2).num == 2
+        assert match.get_match_innings(2).team == "Sunrisers Hyderabad"
+        assert match.get_match_innings(2).runs == 247
+        assert match.get_match_innings(2).overs == 18.3
+        assert match.get_match_innings(2).wickets == 2
         hits = get_hits_info()
         assert hits.hits_today == 9
         assert hits.hits_used == 1

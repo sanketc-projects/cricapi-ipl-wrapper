@@ -22,29 +22,62 @@ class Innings:
         self.overs = 0.0
         self.wickets = 0
 
-class Match:
-    def __init__(self, match_json):
-        self.id = match_json.get("id", "N/A")
-        self.name = match_json.get("name", "N/A")
-        date_str = match_json.get("date")
-        try:
-            self.date = datetime.strptime(date_str, "%Y-%m-%d")
-        except ValueError:
-            self.date = datetime.now()
-        self.status = match_json.get("status", "N/A")
-        self.venue = match_json.get("venue", "N/A")
-        self.home_team = match_json.get("teams", ["N/A", "N/A"])[0]
-        self.away_team = match_json.get("teams", ["N/A", "N/A"])[1]
-        self.toss_winner = "" # will be updated when update_match_info() is called
-        self.toss_result = "" # will be updated when update_match_info() is called
-        self.match_winner = "" # will be updated when update_match_info() is called
-        self.innings = [Innings(), Innings()] # will be updated when update_match_info() is called
-
     def __str__(self):
-        return f"{self.name:<40}, Date: {self.date.strftime('%B %d %Y'):<15}, Status: {self.status:<10}"
+        return f"Innings {self.num:<4}: {self.team:<20} - score: {self.runs:<3}/{self.wickets:<2} Overs: {self.overs}"
 
     def __repr__(self):
         return self.__str__()
+
+class Match:
+    def __init__(self, match_json):
+        self.__match_json = match_json
+        date_str = match_json.get("date")
+        try:
+            self.__date = datetime.strptime(date_str, "%Y-%m-%d")
+        except ValueError:
+            self.__date = datetime.now()
+        self.__innings = [Innings(), Innings()] # will be updated when update_match_info() is called
+
+    def __str__(self):
+        return f"{self.get_date_str():<15} {self.get_name():<40} {self.get_status():<10}\n" \
+               f"\t{self.get_match_innings_summary(1)}\n" \
+               f"\t{self.get_match_innings_summary(2)}"
+
+    def __repr__(self):
+        return json.dumps(self.__raw_json, indent=4)
+
+    def get_id(self):
+        return self.__match_json.get("id", "N/A")
+
+    def get_name(self):
+        return self.__match_json.get("name", "N/A")
+
+    def get_date_str(self):
+        return self.__date.strftime("%B %d %Y")
+
+    def get_date(self):
+        return self.__date
+
+    def get_status(self):
+        return self.__match_json.get("status", "N/A")
+
+    def get_venue(self):
+        return self.__match_json.get("venue", "N/A")
+
+    def get_home_team(self):
+        return self.__match_json.get("teams", ["N/A", "N/A"])[0]
+
+    def get_away_team(self):
+        return self.__match_json.get("teams", ["N/A", "N/A"])[1]
+
+    def get_toss_winner(self):
+        return self.__match_json.get("tossWinner", "N/A")
+
+    def get_toss_result(self):
+        return self.__match_json.get("tossChoice", "N/A")
+
+    def get_match_winner(self):
+        return self.__match_json.get("matchWinner", "N/A")
 
     def update_match_info(self):
         if not API_KEY:
@@ -52,39 +85,45 @@ class Match:
 
         params = {
             "apikey": API_KEY,
-            "id": self.id
+            "id": self.get_id()
         }
         response = requests.get(MATCH_INFO_URL, params=params, timeout=10)
         response.raise_for_status()
-        match_data = response.json().get("data", {})
+        self.__match_json = response.json().get("data", {})
 
-        if not match_data.get("matchEnded", False):
+        if not self.__match_json.get("matchEnded", False):
             return
 
-        self.toss_winner = match_data.get("tossWinner", "")
-        self.toss_result = match_data.get("tossChoice", "")
-        self.match_winner = match_data.get("matchWinner", "")
-
-        score = match_data.get("score", [])
+        score = self.__match_json.get("score", [])
         if len(score) != 2:
             return
-        self.innings[0].num = 1
+        self.__innings[0].num = 1
         pattern = re.compile(r"(.*) Inning .*")
         inngs_str = score[0].get("inning", "")
-        self.innings[0].team = pattern.match(inngs_str).group(1) if pattern.match(inngs_str) else inngs_str
-        self.innings[0].runs = score[0].get("r", 0)
-        self.innings[0].overs = score[0].get("o", 0.0)
-        self.innings[0].wickets = score[0].get("w", 0)
+        self.__innings[0].team = pattern.match(inngs_str).group(1) if pattern.match(inngs_str) else inngs_str
+        self.__innings[0].runs = score[0].get("r", 0)
+        self.__innings[0].overs = score[0].get("o", 0.0)
+        self.__innings[0].wickets = score[0].get("w", 0)
 
-        self.innings[1].num = 2
+        self.__innings[1].num = 2
         pattern = re.compile(r"(.*) Inning .*")
         inngs_str = score[1].get("inning", "")
-        self.innings[1].team = pattern.match(inngs_str).group(1) if pattern.match(inngs_str) else inngs_str
-        self.innings[1].runs = score[1].get("r", 0)
-        self.innings[1].overs = score[1].get("o", 0.0)
-        self.innings[1].wickets = score[1].get("w", 0)
+        self.__innings[1].team = pattern.match(inngs_str).group(1) if pattern.match(inngs_str) else inngs_str
+        self.__innings[1].runs = score[1].get("r", 0)
+        self.__innings[1].overs = score[1].get("o", 0.0)
+        self.__innings[1].wickets = score[1].get("w", 0)
 
         _update_hits_info(response.json().get("info", {}))
+
+    def get_match_innings_summary(self, innings):
+        if innings != 1 and innings != 2:
+            raise ValueError("Innings must be 1 or 2.")
+        return f"{self.__innings[innings - 1]}"
+
+    def get_match_innings(self, innings):
+        if innings != 1 and innings != 2:
+            raise ValueError("Innings must be 1 or 2.")
+        return self.__innings[innings - 1]
 
 class Series:
     def __init__(self, series_json):
@@ -105,7 +144,7 @@ class Series:
         self.matches = []
 
     def __str__(self):
-        return f"{self.name:<40}, Matches: {self.num_matches:<10}, Start Date: {self.start_date.strftime('%B %d %Y'):<15}, End Date: {self.end_date.strftime('%B %d %Y'):15}"
+        return f"{self.name:<30} Matches: {self.num_matches:<5} Start Date: {self.start_date.strftime('%B %d %Y'):<15} End Date: {self.end_date.strftime('%B %d %Y'):15}"
 
     def __repr__(self):
         return self.__str__()
@@ -132,7 +171,7 @@ class HitInfo:
         self.hits_limit = 100
 
     def __str__(self):
-        return f"Hits Today: {self.hits_today}, Hits Used: {self.hits_used}, Hits Limit: {self.hits_limit}"
+        return f"Hits Today: {self.hits_today} Hits Used: {self.hits_used} Hits Limit: {self.hits_limit}"
 
     def __repr__(self):
         return self.__str__()
