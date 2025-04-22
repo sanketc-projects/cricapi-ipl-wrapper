@@ -55,7 +55,7 @@ class Match:
                f"\t{self.get_match_innings_summary(2)}"
 
     def __repr__(self):
-        return json.dumps(self.__raw_json, indent=4)
+        return json.dumps(self.__match_json, indent=4)
 
     def get_id(self):
         return self.__match_json.get("id", "N/A")

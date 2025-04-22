@@ -2,6 +2,7 @@ from cricapi_ipl.modules import Innings, Team, Match, get_hits_info
 import pytest
 from unittest.mock import patch, Mock
 from datetime import datetime
+import json
 
 def test_match_initialization():
     match_init_json = {
@@ -127,6 +128,11 @@ def test_update_match_info():
     assert match.get_match_winner().name == "Sunrisers Hyderabad"
     assert match.get_match_innings_summary(1) == "Innings 1   : PK    - score: 245/6  Overs: 20"
     assert match.get_match_innings_summary(2) == "Innings 2   : SH    - score: 247/2  Overs: 18.3"
+    assert match.__repr__() == json.dumps(mock_response.json().get("data"), indent=4)
+    expecteed_match_str = "April 12 2025   Sunrisers Hyderabad vs Punjab Kings, 27th Match Sunrisers Hyderabad won by 8 wkts\n" \
+                    "\tInnings 1   : PK    - score: 245/6  Overs: 20\n" \
+                    "\tInnings 2   : SH    - score: 247/2  Overs: 18.3"
+    assert match.__str__() == expecteed_match_str
 
     #check incorrect inning number raises error
     with pytest.raises(ValueError):
