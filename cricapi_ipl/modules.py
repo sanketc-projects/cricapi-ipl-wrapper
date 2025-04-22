@@ -46,6 +46,7 @@ class Match:
             self.__date = datetime.strptime(date_str, "%Y-%m-%d")
         except ValueError:
             self.__date = datetime.now()
+
         self.__innings = [Innings(), Innings()] # will be updated when update_match_info() is called
 
     def __str__(self):
@@ -75,19 +76,19 @@ class Match:
         return self.__match_json.get("venue", "N/A")
 
     def get_home_team(self):
-        return self.__match_json.get("teams", ["N/A", "N/A"])[0]
+        return Team(self.__match_json.get("teams", ["N/A", "N/A"])[0])
 
     def get_away_team(self):
-        return self.__match_json.get("teams", ["N/A", "N/A"])[1]
+        return Team(self.__match_json.get("teams", ["N/A", "N/A"])[1])
 
     def get_toss_winner(self):
-        return self.__match_json.get("tossWinner", "N/A")
+        return Team(self.__match_json.get("tossWinner", "N/A"))
 
     def get_toss_result(self):
         return self.__match_json.get("tossChoice", "N/A")
 
     def get_match_winner(self):
-        return self.__match_json.get("matchWinner", "N/A")
+        return Team(self.__match_json.get("matchWinner", "N/A"))
 
     def update_match_info(self):
         if not API_KEY:

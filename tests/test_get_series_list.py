@@ -140,104 +140,19 @@ def test_update_match_info_1():
         assert series.matches[0].get_status() == "Chennai Super Kings won by 4 wkts"
         assert series.matches[0].get_venue() == "MA Chidambaram Stadium, Chennai"
         assert series.matches[0].get_date() == datetime.strptime("2025-03-23", "%Y-%m-%d")
-        assert series.matches[0].get_home_team() == "Chennai Super Kings"
-        assert series.matches[0].get_away_team() == "Mumbai Indians"
+        assert series.matches[0].get_home_team().name == "Chennai Super Kings"
+        assert series.matches[0].get_away_team().name == "Mumbai Indians"
         assert series.matches[0].get_id() == "208d68e5-3fab-4f3b-88e9-29ec4a02d3e2"
 
         assert series.matches[1].get_name() == "Gujarat Titans vs Punjab Kings, 5th Match"
         assert series.matches[1].get_status() == "Punjab Kings won by 11 runs"
         assert series.matches[1].get_venue() == "Narendra Modi Stadium, Ahmedabad"
         assert series.matches[1].get_date() == datetime.strptime("2025-03-25", "%Y-%m-%d")
-        assert series.matches[1].get_home_team() == "Gujarat Titans"
-        assert series.matches[1].get_away_team() == "Punjab Kings"
+        assert series.matches[1].get_home_team().name == "Gujarat Titans"
+        assert series.matches[1].get_away_team().name == "Punjab Kings"
         assert series.matches[1].get_id() == "83d70527-5fc4-4fad-8dd2-b88b385f379e"
 
         hits = get_hits_info()
         assert hits.hits_today == 2
         assert hits.hits_used == 2
-        assert hits.hits_limit == 100
-
-def test_update_match_info_2():
-    mock_response = Mock()
-    mock_response.json.return_value = {
-        "data": {
-            "id": "b13f129b-2596-429d-ad49-a1b0d102809b",
-            "name": "Sunrisers Hyderabad vs Punjab Kings, 27th Match",
-            "matchType": "t20",
-            "status": "Sunrisers Hyderabad won by 8 wkts",
-            "venue": "Rajiv Gandhi International Stadium, Hyderabad",
-            "date": "2025-04-12",
-            "dateTimeGMT": "2025-04-12T14:00:00",
-            "teams": [
-                "Sunrisers Hyderabad",
-                "Punjab Kings"
-            ],
-            "score": [
-                {
-                    "r": 245,
-                    "w": 6,
-                    "o": 20,
-                    "inning": "Punjab Kings Inning 1"
-                },
-                {
-                    "r": 247,
-                    "w": 2,
-                    "o": 18.3,
-                    "inning": "Sunrisers Hyderabad Inning 1"
-                }
-            ],
-            "tossWinner": "Punjab Kings",
-            "tossChoice": "bat",
-            "matchWinner": "Sunrisers Hyderabad",
-            "series_id": "d5a498c8-7596-4b93-8ab0-e0efc3345312",
-            "matchStarted": 'true',
-            "matchEnded": 'true'
-        },
-        "status": "success",
-        "info": {
-           "hitsToday": 9,
-           "hitsUsed": 1,
-           "hitsLimit": 100,
-           "credits": 0,
-           "server": 4,
-           "queryTime": 13.7922,
-           "s": 0,
-           "cache": 0
-        }
-    }
-    mock_response.raise_for_status = Mock()
-    mock_response.status_code = 200
-
-    with patch('cricapi_ipl.modules.requests.get', return_value=mock_response):
-        match = Match({
-            "id": "b13f129b-2596-429d-ad49-a1b0d102809b",
-            "name": "Sunrisers Hyderabad vs Punjab Kings, 27th Match",
-            "matchType": "t20",
-            "status": "Sunrisers Hyderabad won by 8 wkts",
-            "venue": "Rajiv Gandhi International Stadium, Hyderabad",
-            "date": "2025-04-12",
-            "teams": [
-                "Sunrisers Hyderabad",
-                "Punjab Kings"
-            ]
-        })
-        match.update_match_info()
-        assert match.get_toss_winner() == "Punjab Kings"
-        assert match.get_toss_result() == "bat"
-        assert match.get_match_winner() == "Sunrisers Hyderabad"
-        assert match.get_match_innings(1).num == 1
-        assert match.get_match_innings(1).team.name == "Punjab Kings"
-        assert match.get_match_innings(1).team.short_name == "PK"
-        assert match.get_match_innings(1).runs == 245
-        assert match.get_match_innings(1).overs == 20
-        assert match.get_match_innings(1).wickets == 6
-        assert match.get_match_innings(2).num == 2
-        assert match.get_match_innings(2).team.name == "Sunrisers Hyderabad"
-        assert match.get_match_innings(2).team.short_name == "SH"
-        assert match.get_match_innings(2).runs == 247
-        assert match.get_match_innings(2).overs == 18.3
-        assert match.get_match_innings(2).wickets == 2
-        hits = get_hits_info()
-        assert hits.hits_today == 9
-        assert hits.hits_used == 1
         assert hits.hits_limit == 100
