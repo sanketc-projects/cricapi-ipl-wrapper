@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cricapi_ipl"
-version = "0.1.0"
+version = "1.0.0"
 description = "Python wrapper for getting IPL match details"
 readme = "README.md"
 requires-python = ">=3.8"
-license = {file = "LICENSE"}
+license-files = ["LICENSE"]
 authors = [
     {name = "Sanket Chitagopkar", email = "sanket.tronics@gmail.com"}
 ]
@@ -16,8 +16,7 @@ dependencies = [
     "requests",
 ]
 [project.optional-dependencies]
-dev = ["pytest",
-       "unittest"]
+dev = ["pytest"]
 
 [tool.setuptools.packages.find]
 where = ["cricapi_ipl"]
