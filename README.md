@@ -31,7 +31,17 @@ Indian Premier League 2022     Matches: 74    Start Date: March 26 2022   End Da
 >>>
 >>>
 >>> series_list[0]
-Indian Premier League 2025     Matches: 74    Start Date: March 22 2025   End Date: May 25 2025
+{
+    "id": "d5a498c8-7596-4b93-8ab0-e0efc3345312",
+    "name": "Indian Premier League 2025",
+    "startDate": "2025-03-22",
+    "endDate": "May 25",
+    "odi": 0,
+    "t20": 74,
+    "test": 0,
+    "squads": 10,
+    "matches": 74
+}
 ```
 
 ### Update matches for a series

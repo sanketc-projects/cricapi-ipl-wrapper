@@ -138,27 +138,46 @@ class Match:
 
 class Series:
     def __init__(self, series_json):
-        self.id = series_json.get("id", "N/A")
-        self.name = series_json.get("name", "N/A")
-        self.num_matches = series_json.get("matches", "N/A")
+        self.__series_json = series_json
         start_date_str = series_json.get("startDate")
         try:
-            self.start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
+            self.__start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
         except ValueError:
-            self.start_date = datetime.now()
+            self.__start_date = datetime.now()
         end_date_str = series_json.get("endDate")
-        end_date_str_formatted = f"{end_date_str} {self.start_date.year}"
+        end_date_str_formatted = f"{end_date_str} {self.__start_date.year}"
         try:
-            self.end_date = datetime.strptime(end_date_str_formatted, "%B %d %Y")
+            self.__end_date = datetime.strptime(end_date_str_formatted, "%B %d %Y")
         except ValueError:
-            self.end_date = datetime.now()
+            self.__end_date = datetime.now()
         self.matches = []
 
     def __str__(self):
-        return f"{self.name:<30} Matches: {self.num_matches:<5} Start Date: {self.start_date.strftime('%B %d %Y'):<15} End Date: {self.end_date.strftime('%B %d %Y'):15}"
+        return f"{self.get_name():<30} Matches: {self.get_num_matches():<5} Start Date: {self.__start_date.strftime('%B %d %Y'):<15} End Date: {self.__end_date.strftime('%B %d %Y'):15}"
 
     def __repr__(self):
-        return self.__str__()
+        return json.dumps(self.__series_json, indent=4)
+
+    def get_id(self):
+        return self.__series_json.get("id", "N/A")
+
+    def get_name(self):
+        return self.__series_json.get("name", "N/A")
+
+    def get_num_matches(self):
+        return self.__series_json.get("matches", "N/A")
+
+    def get_start_date(self):
+        return self.__start_date
+
+    def get_end_date(self):
+        return self.__end_date
+
+    def get_start_date_str(self):
+        return self.__start_date.strftime("%B %d %Y")
+
+    def get_end_date_str(self):
+        return self.__end_date.strftime("%B %d %Y")
 
     def update_matches(self):
         if not API_KEY:
@@ -166,7 +185,7 @@ class Series:
 
         params = {
             "apikey": API_KEY,
-            "id": self.id
+            "id": self.get_id(),
         }
         response = requests.get(SERIES_INFO_URL, params=params, timeout=10)
         response.raise_for_status()

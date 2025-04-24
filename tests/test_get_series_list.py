@@ -49,24 +49,24 @@ def test_get_series_list():
     with patch('cricapi_ipl.modules.requests.get', return_value=mock_response):
         series_list = get_series_list()
         assert len(series_list) == 2
-        assert series_list[0].name == "Indian Premier League 2023"
-        assert series_list[0].num_matches == 70
-        assert series_list[0].start_date == datetime.strptime("2023-03-31", "%Y-%m-%d")
-        assert series_list[0].end_date == datetime.strptime("May 15 2023", "%B %d %Y")
-        assert series_list[0].id == "1"
+        assert series_list[0].get_name() == "Indian Premier League 2023"
+        assert series_list[0].get_num_matches() == 70
+        assert series_list[0].get_start_date() == datetime.strptime("2023-03-31", "%Y-%m-%d")
+        assert series_list[0].get_end_date() == datetime.strptime("May 15 2023", "%B %d %Y")
+        assert series_list[0].get_id() == "1"
 
-        assert series_list[1].name == "ndian Premier League 2024"
-        assert series_list[1].num_matches == 74
-        assert series_list[1].start_date == datetime.strptime("2024-06-01", "%Y-%m-%d")
-        assert series_list[1].end_date == datetime.strptime("May 25 2024", "%B %d %Y")
-        assert series_list[1].id == "2"
+        assert series_list[1].get_name() == "ndian Premier League 2024"
+        assert series_list[1].get_num_matches() == 74
+        assert series_list[1].get_start_date() == datetime.strptime("2024-06-01", "%Y-%m-%d")
+        assert series_list[1].get_end_date() == datetime.strptime("May 25 2024", "%B %d %Y")
+        assert series_list[1].get_id() == "2"
 
         hits = get_hits_info()
         assert hits.hits_today == 1
         assert hits.hits_used == 1
         assert hits.hits_limit == 100
 
-def test_update_match_info_1():
+def test_update_matches():
     mock_response = Mock()
     mock_response.json.return_value = {
         "data": {
