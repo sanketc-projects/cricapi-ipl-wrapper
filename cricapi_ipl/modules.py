@@ -43,8 +43,13 @@ class Team:
         # short name is the acronym of the team name
         self.short_name  = "".join([word[0].upper() for word in team_name.split() if word])
 
+        if (self.short_name == "PK"):
+            self.short_name = "PBKS"
+        elif (self.short_name == "SH"):
+            self.short_name = "SRH"
+
     def __str__(self):
-        return f"{self.short_name:<3} - {self.name}"
+        return f"{self.short_name:<4} - {self.name}"
 
     def __repr__(self):
         return self.__str__()
@@ -230,6 +235,8 @@ class Series:
         self.matches = [Match(match) for match in all_results]
         _update_hits_info(response.json().get("info", {}))
         for match in self.matches:
+            if match.get_home_team() == Team('Tbc') or match.get_away_team() == Team('Tbc'):
+                continue
             self.teams.add(match.get_home_team())
             self.teams.add(match.get_away_team())
             self.venues.add(match.get_venue())

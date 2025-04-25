@@ -91,20 +91,21 @@ Himachal Pradesh Cricket Association Stadium, Dharamsala
 Wankhede Stadium, Mumbai
 Maharaja Yadavindra Singh International Cricket Stadium, Mullanpur, Chandigarh
 Bharat Ratna Shri Atal Bihari Vajpayee Ekana Cricket Stadium, Lucknow
+>>>
+>>>
 >>> for t in series_list[0].teams:
 ...     print(t)
 ...
-GT  - Gujarat Titans
-SH  - Sunrisers Hyderabad
-LSG - Lucknow Super Giants
-CSK - Chennai Super Kings
-MI  - Mumbai Indians
-KKR - Kolkata Knight Riders
-RR  - Rajasthan Royals
-T   - Tbc
-DC  - Delhi Capitals
-PK  - Punjab Kings
-RCB - Royal Challengers Bengaluru
+GT    - Gujarat Titans
+SRH   - Sunrisers Hyderabad
+LSG   - Lucknow Super Giants
+CSK   - Chennai Super Kings
+MI    - Mumbai Indians
+KKR   - Kolkata Knight Riders
+RR    - Rajasthan Royals
+DC    - Delhi Capitals
+PBKS  - Punjab Kings
+RCB   - Royal Challengers Bengaluru
 >>>
 ```
 

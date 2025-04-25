@@ -4,9 +4,9 @@ import pytest
 def test_team_initialization():
     team = Team("Sunrisers Hyderabad")
     assert team.name == "Sunrisers Hyderabad"
-    assert team.short_name == "SH"
-    assert str(team) == "SH  - Sunrisers Hyderabad"
-    assert repr(team) == "SH  - Sunrisers Hyderabad"
+    assert team.short_name == "SRH"
+    assert str(team) == "SRH  - Sunrisers Hyderabad"
+    assert repr(team) == "SRH  - Sunrisers Hyderabad"
 
 def test_team_equality():
     team1 = Team("Sunrisers Hyderabad")
