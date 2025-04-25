@@ -14,6 +14,29 @@ SERIES_INFO_URL = "https://api.cricapi.com/v1/series_info"
 MATCH_INFO_URL = "https://api.cricapi.com/v1/match_info"
 
 
+
+class Venue:
+    def __init__(self, venue_name_full):
+        # venue name is of the format "Satdium Name, City"
+        venue_name_split = venue_name_full.split(",")
+        self.name = venue_name_split[0].strip()
+        self.city = venue_name_split[1].strip() if len(venue_name_split) > 1 else ""
+        self.__full_name = venue_name_full
+
+    def __str__(self):
+        return self.__full_name
+
+    def __repr__(self):
+        return self.__full_name
+
+    def __eq__(self, other):
+        if isinstance(other, Venue):
+            return self.name == other.name and self.city == other.city
+        return False
+
+    def __hash__(self):
+        return hash((self.name, self.city))
+
 class Team:
     def __init__(self, team_name):
         self.name = team_name
@@ -21,7 +44,18 @@ class Team:
         self.short_name  = "".join([word[0].upper() for word in team_name.split() if word])
 
     def __str__(self):
-        return f"{self.short_name:<3} - {self.name:<20}"
+        return f"{self.short_name:<3} - {self.name}"
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __eq__(self, other):
+        if isinstance(other, Team):
+            return self.name == other.name
+        return False
+
+    def __hash__(self):
+        return hash(self.name)
 
 class Innings:
     def __init__(self):
@@ -73,7 +107,7 @@ class Match:
         return self.__match_json.get("status", "N/A")
 
     def get_venue(self):
-        return self.__match_json.get("venue", "N/A")
+        return Venue(self.__match_json.get("venue", "N/A"))
 
     def get_home_team(self):
         return Team(self.__match_json.get("teams", ["N/A", "N/A"])[0])
@@ -151,6 +185,8 @@ class Series:
         except ValueError:
             self.__end_date = datetime.now()
         self.matches = []
+        self.teams = set()
+        self.venues = set()
 
     def __str__(self):
         return f"{self.get_name():<30} Matches: {self.get_num_matches():<5} Start Date: {self.__start_date.strftime('%B %d %Y'):<15} End Date: {self.__end_date.strftime('%B %d %Y'):15}"
@@ -193,6 +229,10 @@ class Series:
         all_results = series_data.get("matchList", [])
         self.matches = [Match(match) for match in all_results]
         _update_hits_info(response.json().get("info", {}))
+        for match in self.matches:
+            self.teams.add(match.get_home_team())
+            self.teams.add(match.get_away_team())
+            self.venues.add(match.get_venue())
 
 class HitInfo:
     def __init__(self):

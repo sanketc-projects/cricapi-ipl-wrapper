@@ -1,4 +1,4 @@
-from cricapi_ipl.modules import get_series_list, set_api_key, get_hits_info, Series, HitInfo, Match
+from cricapi_ipl.modules import get_series_list, set_api_key, get_hits_info, Series, Team, Venue
 from datetime import datetime
 from unittest.mock import patch, Mock
 import pytest
@@ -138,19 +138,28 @@ def test_update_matches():
         assert len(series.matches) == 2
         assert series.matches[0].get_name() == "Chennai Super Kings vs Mumbai Indians, 3rd Match"
         assert series.matches[0].get_status() == "Chennai Super Kings won by 4 wkts"
-        assert series.matches[0].get_venue() == "MA Chidambaram Stadium, Chennai"
+        assert series.matches[0].get_venue() == Venue("MA Chidambaram Stadium, Chennai")
         assert series.matches[0].get_date() == datetime.strptime("2025-03-23", "%Y-%m-%d")
-        assert series.matches[0].get_home_team().name == "Chennai Super Kings"
-        assert series.matches[0].get_away_team().name == "Mumbai Indians"
+        assert series.matches[0].get_home_team() == Team("Chennai Super Kings")
+        assert series.matches[0].get_away_team() == Team("Mumbai Indians")
         assert series.matches[0].get_id() == "208d68e5-3fab-4f3b-88e9-29ec4a02d3e2"
 
         assert series.matches[1].get_name() == "Gujarat Titans vs Punjab Kings, 5th Match"
         assert series.matches[1].get_status() == "Punjab Kings won by 11 runs"
-        assert series.matches[1].get_venue() == "Narendra Modi Stadium, Ahmedabad"
+        assert series.matches[1].get_venue() == Venue("Narendra Modi Stadium, Ahmedabad")
         assert series.matches[1].get_date() == datetime.strptime("2025-03-25", "%Y-%m-%d")
-        assert series.matches[1].get_home_team().name == "Gujarat Titans"
-        assert series.matches[1].get_away_team().name == "Punjab Kings"
+        assert series.matches[1].get_home_team() == Team("Gujarat Titans")
+        assert series.matches[1].get_away_team() == Team("Punjab Kings")
         assert series.matches[1].get_id() == "83d70527-5fc4-4fad-8dd2-b88b385f379e"
+
+        assert len(series.teams) == 4
+        assert len(series.venues) == 2
+        assert Team("Chennai Super Kings") in series.teams
+        assert Team("Mumbai Indians") in series.teams
+        assert Team("Gujarat Titans") in series.teams
+        assert Team("Punjab Kings") in series.teams
+        assert Venue("MA Chidambaram Stadium, Chennai") in series.venues
+        assert Venue("Narendra Modi Stadium, Ahmedabad") in series.venues
 
         hits = get_hits_info()
         assert hits.hits_today == 2

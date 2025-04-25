@@ -1,4 +1,4 @@
-from cricapi_ipl.modules import Innings, Team, Match, get_hits_info
+from cricapi_ipl.modules import Venue, Match, Team, get_hits_info
 import pytest
 from unittest.mock import patch, Mock
 from datetime import datetime
@@ -22,16 +22,12 @@ def test_match_initialization():
     assert match.get_name() == "Sunrisers Hyderabad vs Punjab Kings, 27th Match"
     assert match.get_date_str() == "April 12 2025"
     assert match.get_status() == "Sunrisers Hyderabad won by 8 wkts"
-    assert match.get_venue() == "Rajiv Gandhi International Stadium, Hyderabad"
-    assert match.get_home_team().name == "Sunrisers Hyderabad"
-    assert match.get_home_team().short_name == "SH"
-    assert match.get_away_team().name == "Punjab Kings"
-    assert match.get_away_team().short_name == "PK"
+    assert match.get_venue() == Venue("Rajiv Gandhi International Stadium, Hyderabad")
+    assert match.get_home_team() == Team("Sunrisers Hyderabad")
+    assert match.get_away_team() == Team("Punjab Kings")
     assert match.get_date() == datetime.strptime("2025-04-12", "%Y-%m-%d")
     assert match.get_match_innings_summary(1) == "Innings 0   :       - score: 000/0  Overs: 0.0"
     assert match.get_match_innings_summary(2) == "Innings 0   :       - score: 000/0  Overs: 0.0"
-
-
 
 def test_update_match_info():
     match_init_json = {
@@ -105,11 +101,9 @@ def test_update_match_info():
     assert match.get_name() == "Sunrisers Hyderabad vs Punjab Kings, 27th Match"
     assert match.get_date_str() == "April 12 2025"
     assert match.get_status() == "Sunrisers Hyderabad won by 8 wkts"
-    assert match.get_venue() == "Rajiv Gandhi International Stadium, Hyderabad"
-    assert match.get_home_team().name == "Sunrisers Hyderabad"
-    assert match.get_home_team().short_name == "SH"
-    assert match.get_away_team().name == "Punjab Kings"
-    assert match.get_away_team().short_name == "PK"
+    assert match.get_venue() == Venue("Rajiv Gandhi International Stadium, Hyderabad")
+    assert match.get_home_team() == Team("Sunrisers Hyderabad")
+    assert match.get_away_team() == Team("Punjab Kings")
     assert match.get_date() == datetime.strptime("2025-04-12", "%Y-%m-%d")
     assert match.get_match_innings(1).num == 1
     assert match.get_match_innings(1).team.name == "Punjab Kings"
@@ -118,7 +112,7 @@ def test_update_match_info():
     assert match.get_match_innings(1).overs == 20
     assert match.get_match_innings(1).wickets == 6
     assert match.get_match_innings(2).num == 2
-    assert match.get_match_innings(2).team.name == "Sunrisers Hyderabad"
+    assert match.get_match_innings(2).team == Team("Sunrisers Hyderabad")
     assert match.get_match_innings(2).team.short_name == "SH"
     assert match.get_match_innings(2).runs == 247
     assert match.get_match_innings(2).overs == 18.3

@@ -73,6 +73,41 @@ Each `Series` object will have a list of `Match` objects. Invoking `update_match
 }
 ```
 
+After running update matches you can also get the set of teams and venues of that series
+```
+>>> for v in series_list[0].venues:
+...     print(v)
+...
+Barsapara Cricket Stadium, Guwahati
+Narendra Modi Stadium, Ahmedabad
+Arun Jaitley Stadium, Delhi
+MA Chidambaram Stadium, Chennai
+Eden Gardens, Kolkata
+Rajiv Gandhi International Stadium, Hyderabad
+Dr. Y.S. Rajasekhara Reddy ACA-VDCA Cricket Stadium, Visakhapatnam
+M.Chinnaswamy Stadium, Bengaluru
+Sawai Mansingh Stadium, Jaipur
+Himachal Pradesh Cricket Association Stadium, Dharamsala
+Wankhede Stadium, Mumbai
+Maharaja Yadavindra Singh International Cricket Stadium, Mullanpur, Chandigarh
+Bharat Ratna Shri Atal Bihari Vajpayee Ekana Cricket Stadium, Lucknow
+>>> for t in series_list[0].teams:
+...     print(t)
+...
+GT  - Gujarat Titans
+SH  - Sunrisers Hyderabad
+LSG - Lucknow Super Giants
+CSK - Chennai Super Kings
+MI  - Mumbai Indians
+KKR - Kolkata Knight Riders
+RR  - Rajasthan Royals
+T   - Tbc
+DC  - Delhi Capitals
+PK  - Punjab Kings
+RCB - Royal Challengers Bengaluru
+>>>
+```
+
 ### Get more details about the match
 The `Match` object has `update_match_info()` function which will fetch scores for a completed match
 ```
