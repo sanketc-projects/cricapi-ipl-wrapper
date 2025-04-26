@@ -1,9 +1,9 @@
 import requests
 import json
 import re
-from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from .config import CONFIG, CONSTANTS
+from .hitinfo import update_hits_info
 
 class Venue:
     def __init__(self, venue_name_full):
@@ -153,7 +153,7 @@ class Match:
         self.__innings[1].overs = score[1].get("o", 0.0)
         self.__innings[1].wickets = score[1].get("w", 0)
 
-        _update_hits_info(response.json().get("info", {}))
+        update_hits_info(response.json().get("info", {}))
 
     def get_match_innings_summary(self, innings):
         if innings != 1 and innings != 2:
@@ -223,35 +223,10 @@ class Series:
         series_data = response.json().get("data", {})
         all_results = series_data.get("matchList", [])
         self.matches = [Match(match) for match in all_results]
-        _update_hits_info(response.json().get("info", {}))
+        update_hits_info(response.json().get("info", {}))
         for match in self.matches:
             if match.get_home_team() == Team('Tbc') or match.get_away_team() == Team('Tbc'):
                 continue
             self.teams.add(match.get_home_team())
             self.teams.add(match.get_away_team())
             self.venues.add(match.get_venue())
-
-class HitInfo:
-    def __init__(self):
-        self.hits_today = 0
-        self.hits_used = 0
-        self.hits_limit = 100
-
-    def __str__(self):
-        return f"Hits Today: {self.hits_today} Hits Used: {self.hits_used} Hits Limit: {self.hits_limit}"
-
-    def __repr__(self):
-        return self.__str__()
-
-
-
-hits = HitInfo()
-
-def get_hits_info():
-    return hits
-
-def _update_hits_info(info):
-    global hits
-    hits.hits_today = info.get("hitsToday", 0)
-    hits.hits_used = info.get("hitsUsed", 0)
-    hits.hits_limit = info.get("hitsLimit", 100)

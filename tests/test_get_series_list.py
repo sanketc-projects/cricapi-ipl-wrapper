@@ -1,4 +1,5 @@
-from cricapi_ipl.modules import get_hits_info, Series, Team, Venue
+from cricapi_ipl.modules import Series, Team, Venue
+from cricapi_ipl.hitinfo import get_hits_info
 from cricapi_ipl.apis import get_series_list, set_api_key
 from datetime import datetime
 from unittest.mock import patch, Mock

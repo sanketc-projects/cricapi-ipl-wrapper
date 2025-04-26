@@ -1,8 +1,8 @@
 
-from .modules import Series, HitInfo, _update_hits_info
+from .modules import Series
+from .hitinfo import update_hits_info
 import requests
 import re
-from datetime import datetime
 from .config import CONFIG, CONSTANTS
 
 def set_api_key(api_key):
@@ -34,5 +34,5 @@ def get_series_list():
     all_results = response.json().get("data", [])
 
     info = response.json().get("info", {})
-    _update_hits_info(info)
+    update_hits_info(info)
     return [Series(series) for series in all_results]
