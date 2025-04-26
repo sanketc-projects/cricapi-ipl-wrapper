@@ -1,4 +1,4 @@
-from cricapi_ipl.modules import set_api_key
+from cricapi_ipl.apis import set_api_key
 import pytest
 
 def test_set_api_key_not_a_string():

@@ -3,17 +3,7 @@ import json
 import re
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
-
-
-API_KEY = ""
-SERIES_SEARCH_TERM = "Indian Premier League"
-
-# API URLs
-SERIES_SERACH_URL = "https://api.cricapi.com/v1/series"
-SERIES_INFO_URL = "https://api.cricapi.com/v1/series_info"
-MATCH_INFO_URL = "https://api.cricapi.com/v1/match_info"
-
-
+from .config import CONFIG, CONSTANTS
 
 class Venue:
     def __init__(self, venue_name_full):
@@ -130,14 +120,14 @@ class Match:
         return Team(self.__match_json.get("matchWinner", "N/A"))
 
     def update_match_info(self):
-        if not API_KEY:
+        if not CONFIG["API_KEY"]:
             raise ValueError("API key is not set. Use set_api_key() to set it.")
 
         params = {
-            "apikey": API_KEY,
+            "apikey": CONFIG["API_KEY"],
             "id": self.get_id()
         }
-        response = requests.get(MATCH_INFO_URL, params=params, timeout=10)
+        response = requests.get(CONSTANTS["MATCH_INFO_URL"], params=params, timeout=10)
         response.raise_for_status()
         self.__match_json = response.json().get("data", {})
 
@@ -221,14 +211,14 @@ class Series:
         return self.__end_date.strftime("%B %d %Y")
 
     def update_matches(self):
-        if not API_KEY:
+        if not CONFIG["API_KEY"]:
             raise ValueError("API key is not set. Use set_api_key() to set it.")
 
         params = {
-            "apikey": API_KEY,
+            "apikey": CONFIG["API_KEY"],
             "id": self.get_id(),
         }
-        response = requests.get(SERIES_INFO_URL, params=params, timeout=10)
+        response = requests.get(CONSTANTS["SERIES_INFO_URL"], params=params, timeout=10)
         response.raise_for_status()
         series_data = response.json().get("data", {})
         all_results = series_data.get("matchList", [])
@@ -253,23 +243,9 @@ class HitInfo:
     def __repr__(self):
         return self.__str__()
 
+
+
 hits = HitInfo()
-
-def set_api_key(api_key):
-    global API_KEY
-    if not isinstance(api_key, str):
-        raise TypeError("API key must be a string.")
-    if not api_key:
-        raise ValueError("API key cannot be empty.")
-    # check if the API key is in GUID format using regex
-    pattern = re.compile(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$')
-    if not pattern.match(api_key):
-        raise ValueError("API key must be in GUID format.")
-    API_KEY = api_key
-
-def clear_api_key():
-    global API_KEY
-    API_KEY = ""
 
 def get_hits_info():
     return hits
@@ -279,21 +255,3 @@ def _update_hits_info(info):
     hits.hits_today = info.get("hitsToday", 0)
     hits.hits_used = info.get("hitsUsed", 0)
     hits.hits_limit = info.get("hitsLimit", 100)
-
-def get_series_list():
-    if not API_KEY:
-        raise ValueError("API key is not set. Use set_api_key() to set it.")
-
-    # Generate offsets list
-    params = {
-        "apikey": API_KEY,
-        "offset": 0,
-        "search": SERIES_SEARCH_TERM
-    }
-    response = requests.get(SERIES_SERACH_URL, params=params, timeout=10)
-    response.raise_for_status()
-    all_results = response.json().get("data", [])
-
-    info = response.json().get("info", {})
-    _update_hits_info(info)
-    return [Series(series) for series in all_results]
