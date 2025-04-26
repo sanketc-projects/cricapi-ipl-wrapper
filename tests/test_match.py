@@ -1,5 +1,6 @@
-from cricapi_ipl.modules import Venue, Match, Team
+from cricapi_ipl.modules import Match, Team
 from cricapi_ipl.hitinfo import get_hits_info
+from cricapi_ipl.venue import Venue
 import pytest
 from unittest.mock import patch, Mock
 from datetime import datetime

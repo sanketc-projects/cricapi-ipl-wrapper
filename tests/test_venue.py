@@ -1,4 +1,4 @@
-from cricapi_ipl.modules import Venue
+from cricapi_ipl.venue import Venue
 import pytest
 
 def test_venue_initialization():
