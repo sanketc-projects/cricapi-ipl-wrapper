@@ -1,5 +1,5 @@
 
-from .modules import Series
+from .series import Series
 from .hitinfo import update_hits_info
 import requests
 import re

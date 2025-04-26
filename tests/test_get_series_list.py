@@ -1,4 +1,4 @@
-from cricapi_ipl.modules import Series
+from cricapi_ipl.series import Series
 from cricapi_ipl.hitinfo import get_hits_info
 from cricapi_ipl.apis import get_series_list, set_api_key
 from cricapi_ipl.venue import Venue
@@ -50,7 +50,7 @@ def test_get_series_list():
     mock_response.raise_for_status = Mock()
     mock_response.status_code = 200
 
-    with patch('cricapi_ipl.modules.requests.get', return_value=mock_response):
+    with patch('cricapi_ipl.series.requests.get', return_value=mock_response):
         series_list = get_series_list()
         assert len(series_list) == 2
         assert series_list[0].get_name() == "Indian Premier League 2023"
@@ -130,7 +130,7 @@ def test_update_matches():
     mock_response.raise_for_status = Mock()
     mock_response.status_code = 200
 
-    with patch('cricapi_ipl.modules.requests.get', return_value=mock_response):
+    with patch('cricapi_ipl.series.requests.get', return_value=mock_response):
         series = Series({
             "id": "1",
             "name": "Indian Premier League 2023",

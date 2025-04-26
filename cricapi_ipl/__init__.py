@@ -1,4 +1,4 @@
-from .modules import Series
+from .series import Series
 from .hitinfo import HitInfo, get_hits_info
 from .apis import set_api_key, get_series_list
 from .venue import Venue

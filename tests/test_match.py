@@ -97,7 +97,7 @@ def test_update_match_info():
     mock_response.raise_for_status = Mock()
     mock_response.status_code = 200
 
-    with patch('cricapi_ipl.modules.requests.get', return_value=mock_response):
+    with patch('cricapi_ipl.series.requests.get', return_value=mock_response):
         match.update_match_info()
 
     assert match.get_id() == "b13f129b-2596-429d-ad49-a1b0d102809b"
