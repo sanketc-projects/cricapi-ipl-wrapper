@@ -19,7 +19,7 @@ def set_api_key(api_key):
 def clear_api_key():
     CONFIG["API_KEY"] = ""
 
-def get_series_list():
+def get_series_map():
     if not CONFIG["API_KEY"]:
         raise ValueError("API key is not set. Use set_api_key() to set it.")
 
@@ -35,4 +35,11 @@ def get_series_list():
 
     info = response.json().get("info", {})
     update_hits_info(info)
-    return [Series(series) for series in all_results]
+    series_list = [Series(series) for series in all_results]
+    # create a map with key as year of start date of the series
+    series_map = {}
+    for series in series_list:
+        # assume there is only one series per year
+        year = series.get_start_date().year
+        series_map[year] = series
+    return series_map

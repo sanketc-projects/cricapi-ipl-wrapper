@@ -1,6 +1,6 @@
 from cricapi_ipl.series import Series
 from cricapi_ipl.hitinfo import get_hits_info
-from cricapi_ipl.apis import get_series_list, set_api_key
+from cricapi_ipl.apis import get_series_map, set_api_key
 from cricapi_ipl.venue import Venue
 from cricapi_ipl.team import Team
 from datetime import datetime
@@ -8,11 +8,11 @@ from unittest.mock import patch, Mock
 import pytest
 
 
-def test_get_series_list_no_api_key():
+def test_get_series_map_no_api_key():
     with pytest.raises(ValueError):
-        get_series_list()  # Should raise ValueError if API key is not set
+        get_series_map()  # Should raise ValueError if API key is not set
 
-def test_get_series_list():
+def test_get_series_map():
     # Mock API key
     set_api_key("12345678-1234-1234-1234-123456789012")
 
@@ -51,19 +51,19 @@ def test_get_series_list():
     mock_response.status_code = 200
 
     with patch('cricapi_ipl.series.requests.get', return_value=mock_response):
-        series_list = get_series_list()
-        assert len(series_list) == 2
-        assert series_list[0].get_name() == "Indian Premier League 2023"
-        assert series_list[0].get_num_matches() == 70
-        assert series_list[0].get_start_date() == datetime.strptime("2023-03-31", "%Y-%m-%d")
-        assert series_list[0].get_end_date() == datetime.strptime("May 15 2023", "%B %d %Y")
-        assert series_list[0].get_id() == "1"
+        series_map = get_series_map()
+        assert len(series_map) == 2
+        assert series_map[2023].get_name() == "Indian Premier League 2023"
+        assert series_map[2023].get_num_matches() == 70
+        assert series_map[2023].get_start_date() == datetime.strptime("2023-03-31", "%Y-%m-%d")
+        assert series_map[2023].get_end_date() == datetime.strptime("May 15 2023", "%B %d %Y")
+        assert series_map[2023].get_id() == "1"
 
-        assert series_list[1].get_name() == "ndian Premier League 2024"
-        assert series_list[1].get_num_matches() == 74
-        assert series_list[1].get_start_date() == datetime.strptime("2024-06-01", "%Y-%m-%d")
-        assert series_list[1].get_end_date() == datetime.strptime("May 25 2024", "%B %d %Y")
-        assert series_list[1].get_id() == "2"
+        assert series_map[2024].get_name() == "ndian Premier League 2024"
+        assert series_map[2024].get_num_matches() == 74
+        assert series_map[2024].get_start_date() == datetime.strptime("2024-06-01", "%Y-%m-%d")
+        assert series_map[2024].get_end_date() == datetime.strptime("May 25 2024", "%B %d %Y")
+        assert series_map[2024].get_id() == "2"
 
         hits = get_hits_info()
         assert hits.hits_today == 1

@@ -15,13 +15,13 @@ To get cricket match info from cricapi in json format we will first need to [sig
 ```
 
 ### Getting the list of IPL series
-The `get_series_list()` will return a list of `Series` objects corresponding to the list of IPL series supported by circapi
+The `get_series_map()` will return a list of `Series` objects corresponding to the list of IPL series supported by circapi
 ```
 >>>
->>> series_list = ipl.get_series_list()
+>>> series_map = ipl.get_series_map()
 >>>
 >>>
->>> for series in series_list:
+>>> for year, series in series_map.items():
 ...     print(series)
 ...
 Indian Premier League 2025     Matches: 74    Start Date: March 22 2025   End Date: May 25 2025
@@ -30,7 +30,7 @@ Indian Premier League 2023     Matches: 75    Start Date: March 31 2023   End Da
 Indian Premier League 2022     Matches: 74    Start Date: March 26 2022   End Date: May 29 2022
 >>>
 >>>
->>> series_list[0]
+>>> series_map[2025]
 {
     "id": "d5a498c8-7596-4b93-8ab0-e0efc3345312",
     "name": "Indian Premier League 2025",
@@ -49,10 +49,10 @@ Each `Series` object will have a list of `Match` objects. Invoking `update_match
 ```
 >>>
 >>>
->>> series_list[0].update_matches()
+>>> series_map[2025].update_matches()
 >>>
 >>>
->>> series_list[0].matches[0]
+>>> series_map[2025].matches[0]
 {
     "id": "208d68e5-3fab-4f3b-88e9-29ec4a02d3e2",
     "name": "Chennai Super Kings vs Mumbai Indians, 3rd Match",
@@ -75,7 +75,7 @@ Each `Series` object will have a list of `Match` objects. Invoking `update_match
 
 After running update matches you can also get the set of teams and venues of that series
 ```
->>> for v in series_list[0].venues:
+>>> for v in series_map[2025].venues:
 ...     print(v)
 ...
 Barsapara Cricket Stadium, Guwahati
@@ -93,7 +93,7 @@ Maharaja Yadavindra Singh International Cricket Stadium, Mullanpur, Chandigarh
 Bharat Ratna Shri Atal Bihari Vajpayee Ekana Cricket Stadium, Lucknow
 >>>
 >>>
->>> for t in series_list[0].teams:
+>>> for t in series_map[2025].teams:
 ...     print(t)
 ...
 GT    - Gujarat Titans
