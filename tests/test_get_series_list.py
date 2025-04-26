@@ -1,7 +1,8 @@
-from cricapi_ipl.modules import Series, Team
+from cricapi_ipl.modules import Series
 from cricapi_ipl.hitinfo import get_hits_info
 from cricapi_ipl.apis import get_series_list, set_api_key
 from cricapi_ipl.venue import Venue
+from cricapi_ipl.team import Team
 from datetime import datetime
 from unittest.mock import patch, Mock
 import pytest

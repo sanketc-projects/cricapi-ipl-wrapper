@@ -1,4 +1,4 @@
-from cricapi_ipl.modules import Team
+from cricapi_ipl.team import Team
 import pytest
 
 def test_team_initialization():
