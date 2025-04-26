@@ -112,8 +112,8 @@ RCB   - Royal Challengers Bengaluru
 ### Get more details about the match
 The `Match` object has `update_match_info()` function which will fetch scores for a completed match
 ```
->>> series_list[0].matches[0].update_match_info()
->>> series_list[0].matches[0]
+>>> series_map[2025].matches[0].update_match_info()
+>>> series_map[2025].matches[0]
 {
     "id": "208d68e5-3fab-4f3b-88e9-29ec4a02d3e2",
     "name": "Chennai Super Kings vs Mumbai Indians, 3rd Match",
@@ -150,7 +150,7 @@ The `Match` object has `update_match_info()` function which will fetch scores fo
     "matchStarted": true,
     "matchEnded": true
 }
->>> print(series_list[0].matches[0])
+>>> print(series_map[2025].matches[0])
 March 23 2025   Chennai Super Kings vs Mumbai Indians, 3rd Match Chennai Super Kings won by 4 wkts
 	Innings 1   : MI    - score: 155/9  Overs: 20
 	Innings 2   : CSK   - score: 158/6  Overs: 19.1
