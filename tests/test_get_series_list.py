@@ -165,6 +165,27 @@ def test_update_matches():
         assert Venue("MA Chidambaram Stadium, Chennai").city in series.venues
         assert Venue("Narendra Modi Stadium, Ahmedabad").city in series.venues
 
+        team_matches = series.get_matches_for_team("Chennai Super Kings")
+        assert len(team_matches) == 1
+        assert team_matches[0] == series.matches[0]
+
+        team_matches = series.get_matches_for_team("MI")
+        assert len(team_matches) == 1
+        assert team_matches[0] == series.matches[0]
+
+        team_matches = series.get_matches_for_team(Team("Gujarat Titans"))
+        assert len(team_matches) == 1
+        assert team_matches[0] == series.matches[1]
+
+        venue_matches = series.get_matches_for_city("Chennai")
+        assert len(venue_matches) == 1
+        assert venue_matches[0] == series.matches[0]
+
+        venue_matches = series.get_matches_for_city("Ahmedabad")
+        assert len(venue_matches) == 1
+        assert venue_matches[0] == series.matches[1]
+
+
         hits = get_hits_info()
         assert hits.hits_today == 2
         assert hits.hits_used == 2

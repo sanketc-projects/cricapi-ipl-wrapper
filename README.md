@@ -157,6 +157,67 @@ March 23 2025   Chennai Super Kings vs Mumbai Indians, 3rd Match Chennai Super K
 >>>
 ```
 
+### Get all the matches for a team
+```
+>>> series_map[2024].update_matches()
+>>>
+>>>
+>>> rcb_match_list = series_map[2024].get_matches_for_team('RCB')
+>>>
+>>>
+>>> import time
+>>> for match in rcb_match_list:
+...     match.update_match_info()
+...     time.sleep(2)
+...     print(match)
+...
+April 06 2024   Rajasthan Royals vs Royal Challengers Bengaluru, 19th Match Rajasthan Royals won by 6 wkts
+	Innings 1   : RCB   - score: 183/3  Overs: 20
+	Innings 2   : RR    - score: 189/4  Overs: 19.1
+April 28 2024   Gujarat Titans vs Royal Challengers Bengaluru, 45th Match Royal Challengers Bengaluru won by 9 wkts
+	Innings 1   : GT    - score: 200/3  Overs: 20
+	Innings 2   : RCB   - score: 206/1  Overs: 16
+May 12 2024     Royal Challengers Bengaluru vs Delhi Capitals, 62nd Match Royal Challengers Bengaluru won by 47 runs
+	Innings 1   : RCB   - score: 187/9  Overs: 20
+	Innings 2   : DC    - score: 140/10 Overs: 19.1
+May 04 2024     Royal Challengers Bengaluru vs Gujarat Titans, 52nd Match Royal Challengers Bengaluru won by 4 wkts
+	Innings 1   : GT    - score: 147/10 Overs: 19.3
+	Innings 2   : RCB   - score: 152/6  Overs: 13.4
+May 09 2024     Punjab Kings vs Royal Challengers Bengaluru, 58th Match Royal Challengers Bengaluru won by 60 runs
+	Innings 1   : RCB   - score: 241/7  Overs: 20
+	Innings 2   : PBKS  - score: 181/10 Overs: 17
+May 18 2024     Royal Challengers Bengaluru vs Chennai Super Kings, 68th Match Royal Challengers Bengaluru won by 27 runs
+	Innings 1   : RCB   - score: 218/5  Overs: 20
+	Innings 2   : CSK   - score: 191/7  Overs: 20
+April 11 2024   Mumbai Indians vs Royal Challengers Bengaluru, 25th Match Mumbai Indians won by 7 wkts
+	Innings 1   : RCB   - score: 196/8  Overs: 20
+	Innings 2   : MI    - score: 199/3  Overs: 15.3
+April 15 2024   Royal Challengers Bengaluru vs Sunrisers Hyderabad, 30th Match Sunrisers Hyderabad won by 25 runs
+	Innings 1   : SRH   - score: 287/3  Overs: 20
+	Innings 2   : RCB   - score: 262/7  Overs: 20
+March 25 2024   Royal Challengers Bengaluru vs Punjab Kings, 6th Match Royal Challengers Bengaluru won by 4 wkts
+	Innings 1   : PBKS  - score: 176/6  Overs: 20
+	Innings 2   : RCB   - score: 178/6  Overs: 19.2
+March 22 2024   Chennai Super Kings vs Royal Challengers Bengaluru, 1st Match Chennai Super Kings won by 6 wkts
+	Innings 1   : RCB   - score: 173/6  Overs: 20
+	Innings 2   : CSK   - score: 176/4  Overs: 18.4
+April 21 2024   Kolkata Knight Riders vs Royal Challengers Bengaluru, 36th Match Kolkata Knight Riders won by 1 run
+	Innings 1   : KKR   - score: 222/6  Overs: 20
+	Innings 2   : RCB   - score: 221/10 Overs: 20
+April 25 2024   Sunrisers Hyderabad vs Royal Challengers Bengaluru, 41st Match Royal Challengers Bengaluru won by 35 runs
+	Innings 1   : RCB   - score: 206/7  Overs: 20
+	Innings 2   : SHCB  - score: 171/8  Overs: 20
+March 29 2024   Royal Challengers Bengaluru vs Kolkata Knight Riders, 10th Match Kolkata Knight Riders won by 7 wkts
+	Innings 1   : RCB   - score: 182/6  Overs: 20
+	Innings 2   : KKR   - score: 186/3  Overs: 16.5
+May 22 2024     Rajasthan Royals vs Royal Challengers Bengaluru, Eliminator Rajasthan Royals won by 4 wkts
+	Innings 1   : RCB   - score: 172/8  Overs: 20
+	Innings 2   : RR    - score: 174/6  Overs: 19
+April 02 2024   Royal Challengers Bengaluru vs Lucknow Super Giants, 15th Match Lucknow Super Giants won by 28 runs
+	Innings 1   : LSG   - score: 181/5  Overs: 20
+	Innings 2   : RCB   - score: 153/10 Overs: 19.4
+```
+
 ### Current hit limits
 To see the API hit limits use `get_hits_info()` of the module
 ```

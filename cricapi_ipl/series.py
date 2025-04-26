@@ -71,3 +71,31 @@ class Series:
             self.teams[match.get_home_team().short_name] = match.get_home_team()
             self.teams[match.get_away_team().short_name] = match.get_away_team()
             self.venues[match.get_venue().city] = match.get_venue()
+
+    def get_matches_for_team(self, in_team):
+        # accept team as Team object or as full team name or short name
+        if isinstance(in_team, Team):
+            team = in_team
+        elif isinstance(in_team, str):
+            in_team = in_team.strip()
+            if len(in_team) <= 4:
+                # assume it's a short name
+                if in_team not in self.teams:
+                    raise ValueError(f"Team {team} not found in series.")
+                team = self.teams[in_team]
+            else:
+                team = Team(in_team)
+                if team.short_name not in self.teams:
+                    raise ValueError(f"Team {team} not found in series.")
+        else:
+            raise TypeError("team must be a Team object or a string.")
+        return [match for match in self.matches if match.get_home_team() == team or match.get_away_team() == team]
+
+    def get_matches_for_city(self, city):
+        # accept only city name as string
+        if not isinstance(city, str):
+            raise TypeError("venue must be a string.")
+        city = city.strip()
+        if city not in self.venues:
+            raise ValueError(f"Venue {city} not found in series.")
+        return [match for match in self.matches if match.get_venue().city == city]
