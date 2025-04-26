@@ -1,4 +1,4 @@
-from cricapi_ipl.modules import Innings
+from cricapi_ipl.match import Innings
 from cricapi_ipl.team import Team
 import pytest
 

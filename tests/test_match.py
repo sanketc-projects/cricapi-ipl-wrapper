@@ -1,4 +1,4 @@
-from cricapi_ipl.modules import Match
+from cricapi_ipl.match import Match
 from cricapi_ipl.team import Team
 from cricapi_ipl.hitinfo import get_hits_info
 from cricapi_ipl.venue import Venue
