@@ -21,8 +21,8 @@ class Series:
         except ValueError:
             self.__end_date = datetime.now()
         self.matches = []
-        self.teams = set()
-        self.venues = set()
+        self.teams = {}
+        self.venues = {}
 
     def __str__(self):
         return f"{self.get_name():<30} Matches: {self.get_num_matches():<5} Start Date: {self.__start_date.strftime('%B %d %Y'):<15} End Date: {self.__end_date.strftime('%B %d %Y'):15}"
@@ -68,6 +68,6 @@ class Series:
         for match in self.matches:
             if match.get_home_team() == Team('Tbc') or match.get_away_team() == Team('Tbc'):
                 continue
-            self.teams.add(match.get_home_team())
-            self.teams.add(match.get_away_team())
-            self.venues.add(match.get_venue())
+            self.teams[match.get_home_team().short_name] = match.get_home_team()
+            self.teams[match.get_away_team().short_name] = match.get_away_team()
+            self.venues[match.get_venue().city] = match.get_venue()

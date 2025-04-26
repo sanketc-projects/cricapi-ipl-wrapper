@@ -158,12 +158,12 @@ def test_update_matches():
 
         assert len(series.teams) == 4
         assert len(series.venues) == 2
-        assert Team("Chennai Super Kings") in series.teams
-        assert Team("Mumbai Indians") in series.teams
-        assert Team("Gujarat Titans") in series.teams
-        assert Team("Punjab Kings") in series.teams
-        assert Venue("MA Chidambaram Stadium, Chennai") in series.venues
-        assert Venue("Narendra Modi Stadium, Ahmedabad") in series.venues
+        assert Team("Chennai Super Kings").short_name in series.teams
+        assert Team("Mumbai Indians").short_name in series.teams
+        assert Team("Gujarat Titans").short_name in series.teams
+        assert Team("Punjab Kings").short_name in series.teams
+        assert Venue("MA Chidambaram Stadium, Chennai").city in series.venues
+        assert Venue("Narendra Modi Stadium, Ahmedabad").city in series.venues
 
         hits = get_hits_info()
         assert hits.hits_today == 2

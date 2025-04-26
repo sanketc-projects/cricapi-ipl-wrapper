@@ -75,7 +75,7 @@ Each `Series` object will have a list of `Match` objects. Invoking `update_match
 
 After running update matches you can also get the set of teams and venues of that series
 ```
->>> for v in series_map[2025].venues:
+>>> for c, v in series_map[2025].venues.items():
 ...     print(v)
 ...
 Barsapara Cricket Stadium, Guwahati
@@ -93,7 +93,7 @@ Maharaja Yadavindra Singh International Cricket Stadium, Mullanpur, Chandigarh
 Bharat Ratna Shri Atal Bihari Vajpayee Ekana Cricket Stadium, Lucknow
 >>>
 >>>
->>> for t in series_map[2025].teams:
+>>> for k, t in series_map[2025].teams.items():
 ...     print(t)
 ...
 GT    - Gujarat Titans
