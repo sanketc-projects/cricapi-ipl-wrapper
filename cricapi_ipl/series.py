@@ -65,6 +65,7 @@ class Series:
         all_results = series_data.get("matchList", [])
         self.matches = [Match(match) for match in all_results]
         update_hits_info(response.json().get("info", {}))
+        self.matches.sort(key=lambda x: x.get_date())
         for match in self.matches:
             if match.get_home_team() == Team('Tbc') or match.get_away_team() == Team('Tbc'):
                 continue
